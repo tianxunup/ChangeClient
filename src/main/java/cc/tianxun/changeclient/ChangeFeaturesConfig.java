@@ -59,8 +59,12 @@ public class ChangeFeaturesConfig {
 		File dir = new File(String.format("config/%s", ChangeClient.MOD_ID));
 		File file = new File(String.format("config/%s/features_config.json", ChangeClient.MOD_ID));
 		if (!file.exists()) {
-			dir.mkdirs();
-			file.createNewFile();
+			if (dir.mkdirs()) {
+				ChangeClient.LOGGER.info("Created config folder.");
+			}
+			if (file.createNewFile()) {
+				ChangeClient.LOGGER.info("Created config file.");
+			}
 		}
 		OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
 		writer.write("{\n");

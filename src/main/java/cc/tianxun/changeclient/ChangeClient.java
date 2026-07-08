@@ -60,12 +60,6 @@ public class ChangeClient implements ClientModInitializer {
 		ClientCommandRegistrationCallback.EVENT.register((dispatcher, _) -> {
 			LiteralArgumentBuilder<FabricClientCommandSource> command = ClientCommands.literal("change");
 			for (Feature<?> feature : ChangeFeaturesConfig.features) {
-				LiteralArgumentBuilder<FabricClientCommandSource> item = ClientCommands.literal(feature.getId());
-				item.executes(context -> {
-					context.getSource().sendFeedback(Component.translatable("command.change,get",
-						feature.getId(),feature.getTranslatableName(),feature.getValue().toString()));
-					return 1;
-				});
 				RequiredArgumentBuilder<FabricClientCommandSource, ?> arg = ClientCommands.argument("value", StringArgumentType.string());
 				switch (feature) {
 					case BooleanFeature booleanFeature ->
@@ -89,7 +83,7 @@ public class ChangeClient implements ClientModInitializer {
 					default -> {}
 				}
 				command.then(ClientCommands.literal(feature.getId()).executes(context -> {
-					context.getSource().sendFeedback(Component.translatable("command.change,get",
+					context.getSource().sendFeedback(Component.translatable("command.change.get",
 						feature.getId(),feature.getTranslatableName(),feature.getValue().toString()));
 					return 1;
 				}).then(arg.executes(this::setCommandExecute)));
@@ -102,7 +96,7 @@ public class ChangeClient implements ClientModInitializer {
 		Feature<?> feature = ChangeFeaturesConfig.getFeatureByName(name);
 		switch (feature) {
 			case null -> {
-				context.getSource().sendFeedback(Component.translatable("command.change.fail.unvanild_key", name));
+				context.getSource().sendFeedback(Component.translatable("command.change.fail.invalid_key", name));
 				return 0;
 			}
 			case BooleanFeature feature1 -> feature1.setValue(BoolArgumentType.getBool(context, "value"));

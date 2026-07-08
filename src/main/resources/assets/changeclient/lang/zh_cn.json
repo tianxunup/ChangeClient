@@ -6,8 +6,8 @@
   "gui.changeclient.close": "关闭",
   "key.change.gui": "打开GUI",
   "key.change.boat_fly_decline": "船只下降",
-  "command.change,get": "%s(%s)的值是%s",
-  "command.change.fail.unvanild_key": "无效的配置: %s",
+  "command.change.get": "%s(%s)的值是%s",
+  "command.change.fail.invalid_key": "无效的配置: %s",
   "command.change.sucess": "%s(%s)已被设置为%s",
   "key.category.changeclient.main": "嫦娥客户端"
 }
