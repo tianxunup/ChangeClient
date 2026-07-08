@@ -8,7 +8,9 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
@@ -22,6 +24,7 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import org.jspecify.annotations.NonNull;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,35 +67,56 @@ public class ChangeClient implements ClientModInitializer {
 						feature.getId(),feature.getTranslatableName(),feature.getValue().toString()));
 					return 1;
 				});
-				switch (feature) {
-
-					case BooleanFeature booleanFeature ->
-						item.then(ClientCommands.argument("value", BoolArgumentType.bool()));
-					case IntegerFeature integerFeature -> {
-						if (integerFeature.isLimited()) {
-							item.then(ClientCommands.argument("value", IntegerArgumentType.integer(integerFeature.getMinValue(), integerFeature.getMaxValue())));
-						}
-						else {
-							item.then(ClientCommands.argument("value", IntegerArgumentType.integer()));
-						}
-					}
-					case FloatFeature floatFeature -> {
-						if (floatFeature.isLimited()) {
-							item.then(ClientCommands.argument("value", FloatArgumentType.floatArg(floatFeature.getMinValue(), floatFeature.getMaxValue())));
-						}
-						else {
-							item.then(ClientCommands.argument("value", FloatArgumentType.floatArg()));
-						}
-					}
-					default -> {}
-				}
-				command.then(item.executes(this::setCommandExecute));
+				RequiredArgumentBuilder<FabricClientCommandSource, ?> arg = getFabricClientCommandSourceRequiredArgumentBuilder(feature);
+				command.then(ClientCommands.literal(feature.getId()).executes(context -> {
+					context.getSource().sendFeedback(Component.translatable("command.change,get",
+						feature.getId(),feature.getTranslatableName(),feature.getValue().toString()));
+					return 1;
+				}).then(arg.executes(this::setCommandExecute)));
 			}
 			dispatcher.register(command);
 		});
 	}
-	public int setCommandExecute(CommandContext<FabricClientCommandSource> context) {
 
+	private static @NonNull RequiredArgumentBuilder<FabricClientCommandSource, ?> getFabricClientCommandSourceRequiredArgumentBuilder(Feature<?> feature) {
+		RequiredArgumentBuilder<FabricClientCommandSource, ?> arg = ClientCommands.argument("value", StringArgumentType.string());
+		switch (feature) {
+			case BooleanFeature booleanFeature ->
+				arg = ClientCommands.argument("value", BoolArgumentType.bool());
+			case IntegerFeature integerFeature -> {
+				if (integerFeature.isLimited()) {
+					arg = ClientCommands.argument("value", IntegerArgumentType.integer(integerFeature.getMinValue(), integerFeature.getMaxValue()));
+				}
+				else {
+					arg = ClientCommands.argument("value", IntegerArgumentType.integer());
+				}
+			}
+			case FloatFeature floatFeature -> {
+				if (floatFeature.isLimited()) {
+					arg =ClientCommands.argument("value", FloatArgumentType.floatArg(floatFeature.getMinValue(), floatFeature.getMaxValue()));
+				}
+				else {
+					arg = ClientCommands.argument("value", FloatArgumentType.floatArg());
+				}
+			}
+			default -> {}
+		}
+		return arg;
+	}
+
+	public int setCommandExecute(CommandContext<FabricClientCommandSource> context) {
+		Feature<?> feature = ChangeFeaturesConfig.getFeatureByName(context.getLastChild().getInput());
+		switch (feature) {
+			case null -> {
+				context.getSource().sendFeedback(Component.translatable("command.change.fail.unvanild_key", context.getLastChild().getInput()));
+				return 0;
+			}
+			case BooleanFeature feature1 -> feature1.setValue(BoolArgumentType.getBool(context, "value"));
+			case IntegerFeature feature1 -> feature1.setValue(IntegerArgumentType.getInteger(context, "value"));
+			case FloatFeature feature1 -> feature1.setValue(FloatArgumentType.getFloat(context, "value"));
+			default -> {}
+		}
+		return 1;
 	}
 
 	private void tick(Minecraft client) {
