@@ -6,10 +6,7 @@ import cc.tianxun.changeclient.feature.FloatFeature;
 import cc.tianxun.changeclient.feature.IntegerFeature;
 import com.google.gson.stream.JsonReader;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,5 +54,26 @@ public class ChangeFeaturesConfig {
 			}
 
 		}
+	}
+	public static void saveConfig() throws IOException {
+		File dir = new File(String.format("config/%s", ChangeClient.MOD_ID));
+		File file = new File(String.format("config/%s/features_config.json", ChangeClient.MOD_ID));
+		if (!file.exists()) {
+			dir.mkdirs();
+			file.createNewFile();
+		}
+		OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
+		writer.write("{\n");
+		int index = 1;
+		for (Feature<?> feature : features) {
+			writer.write(String.format("\t\"%s\": %s", feature.getId(),feature.getValue().toString()));
+			if (index < features.size()) {
+				writer.write(',');
+			}
+			writer.write("\n");
+			index++;
+		}
+		writer.write("}");
+		writer.close();
 	}
 }

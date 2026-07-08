@@ -1,9 +1,13 @@
 {
-  "gui.changeclient.main": "Chang'e Client Gui",
+  "gui.changeclient.main": "Chang'e Client GUI",
   "gui.changeclient.close": "Close",
+  "key.category.changeclient.main": "Chang'e Client",
+  "key.change.gui": "Open GUI",
+  "key.change.boat_fly_decline": "Boat Decline",
   "changeclient.feature.boat_fly": "Boat Fly",
   "changeclient.feature.boat_speed": "Boat Speed",
   "changeclient.feature.boat_vertical_speed": "Boat Vertical Speed",
   "command.change,get": "The value of %s(%s) is %s",
-  "command.change.fail.unvanild_key": "Unvanild key: %s"
+  "command.change.fail.unvanild_key": "Unvanild key: %s",
+  "command.change.sucess": "The config %s(%s) has been set to %s."
 }

@@ -24,7 +24,6 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
-import org.jspecify.annotations.NonNull;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,13 +46,13 @@ public class ChangeClient implements ClientModInitializer {
 		boatFlyDeclineKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.change.boat_fly_decline",
 			InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_DOWN, KEY_CATEGORY));
 		ClientTickEvents.END_CLIENT_TICK.register(this::tick);
-
 		try {
 			ChangeFeaturesConfig.loadConfig();
 		}
 		catch (IOException e) {
 			LOGGER.error(e.getMessage());
 		}
+		this.registerCommands();
 		LOGGER.info("Initialized!");
 	}
 
@@ -67,7 +66,28 @@ public class ChangeClient implements ClientModInitializer {
 						feature.getId(),feature.getTranslatableName(),feature.getValue().toString()));
 					return 1;
 				});
-				RequiredArgumentBuilder<FabricClientCommandSource, ?> arg = getFabricClientCommandSourceRequiredArgumentBuilder(feature);
+				RequiredArgumentBuilder<FabricClientCommandSource, ?> arg = ClientCommands.argument("value", StringArgumentType.string());
+				switch (feature) {
+					case BooleanFeature booleanFeature ->
+						arg = ClientCommands.argument("value", BoolArgumentType.bool());
+					case IntegerFeature integerFeature -> {
+						if (integerFeature.isLimited()) {
+							arg = ClientCommands.argument("value", IntegerArgumentType.integer(integerFeature.getMinValue(), integerFeature.getMaxValue()));
+						}
+						else {
+							arg = ClientCommands.argument("value", IntegerArgumentType.integer());
+						}
+					}
+					case FloatFeature floatFeature -> {
+						if (floatFeature.isLimited()) {
+							arg =ClientCommands.argument("value", FloatArgumentType.floatArg(floatFeature.getMinValue(), floatFeature.getMaxValue()));
+						}
+						else {
+							arg = ClientCommands.argument("value", FloatArgumentType.floatArg());
+						}
+					}
+					default -> {}
+				}
 				command.then(ClientCommands.literal(feature.getId()).executes(context -> {
 					context.getSource().sendFeedback(Component.translatable("command.change,get",
 						feature.getId(),feature.getTranslatableName(),feature.getValue().toString()));
@@ -77,38 +97,12 @@ public class ChangeClient implements ClientModInitializer {
 			dispatcher.register(command);
 		});
 	}
-
-	private static @NonNull RequiredArgumentBuilder<FabricClientCommandSource, ?> getFabricClientCommandSourceRequiredArgumentBuilder(Feature<?> feature) {
-		RequiredArgumentBuilder<FabricClientCommandSource, ?> arg = ClientCommands.argument("value", StringArgumentType.string());
-		switch (feature) {
-			case BooleanFeature booleanFeature ->
-				arg = ClientCommands.argument("value", BoolArgumentType.bool());
-			case IntegerFeature integerFeature -> {
-				if (integerFeature.isLimited()) {
-					arg = ClientCommands.argument("value", IntegerArgumentType.integer(integerFeature.getMinValue(), integerFeature.getMaxValue()));
-				}
-				else {
-					arg = ClientCommands.argument("value", IntegerArgumentType.integer());
-				}
-			}
-			case FloatFeature floatFeature -> {
-				if (floatFeature.isLimited()) {
-					arg =ClientCommands.argument("value", FloatArgumentType.floatArg(floatFeature.getMinValue(), floatFeature.getMaxValue()));
-				}
-				else {
-					arg = ClientCommands.argument("value", FloatArgumentType.floatArg());
-				}
-			}
-			default -> {}
-		}
-		return arg;
-	}
-
 	public int setCommandExecute(CommandContext<FabricClientCommandSource> context) {
-		Feature<?> feature = ChangeFeaturesConfig.getFeatureByName(context.getLastChild().getInput());
+		String name = context.getLastChild().getInput().split(" ",3)[1];
+		Feature<?> feature = ChangeFeaturesConfig.getFeatureByName(name);
 		switch (feature) {
 			case null -> {
-				context.getSource().sendFeedback(Component.translatable("command.change.fail.unvanild_key", context.getLastChild().getInput()));
+				context.getSource().sendFeedback(Component.translatable("command.change.fail.unvanild_key", name));
 				return 0;
 			}
 			case BooleanFeature feature1 -> feature1.setValue(BoolArgumentType.getBool(context, "value"));
@@ -116,6 +110,13 @@ public class ChangeClient implements ClientModInitializer {
 			case FloatFeature feature1 -> feature1.setValue(FloatArgumentType.getFloat(context, "value"));
 			default -> {}
 		}
+		try {
+			ChangeFeaturesConfig.saveConfig();
+		}
+		catch (IOException e) {
+			LOGGER.error(e.getMessage());
+		}
+		context.getSource().sendFeedback(Component.translatable("command.change.sucess", name,feature.getTranslatableName(),feature.getValue().toString()));
 		return 1;
 	}
 
