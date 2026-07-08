@@ -1,0 +1,8 @@
+{
+  "gui.changeclient.main": "Chang'e Client Gui",
+  "gui.changeclient.close": "Close",
+  "changeclient.feature.boat_fly": "Boat Fly",
+  "changeclient.feature.boat_speed": "Boat Speed",
+  "changeclient.feature.boat_vertical_speed": "Boat Vertical Speed",
+  "command.change,get": "The value of %s(%s) is %s"
+}

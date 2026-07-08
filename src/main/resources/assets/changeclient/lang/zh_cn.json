@@ -1,0 +1,6 @@
+{
+  "gui.changeclient.main": "嫦娥客户端 Gui",
+  "changeclient.feature.boat_fly": "船飞",
+  "changeclient.feature.boat_speed": "船只速度",
+  "changeclient.feature.boat_vertical_speed": "船只竖直速度"
+}

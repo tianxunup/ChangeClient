@@ -1,0 +1,30 @@
+{
+	"schemaVersion": 1,
+	"id": "changeclient",
+	"version": "${version}",
+	"name": "ChangeClient",
+	"description": "A mod which betters the client.",
+	"authors": [
+		"TianxunUP"
+	],
+	"contact": {
+		"bilibili": "https://space.bilibili.com/627871340"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/changeclient/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"client": [
+			"cc.tianxun.changeclient.ChangeClient"
+		]
+	},
+	"mixins": [
+		"changeclient.mixins.json"
+	],
+	"depends": {
+		"fabricloader": "*",
+		"minecraft": "~26.2",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}
