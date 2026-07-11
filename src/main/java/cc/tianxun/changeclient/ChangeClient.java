@@ -1,9 +1,6 @@
 package cc.tianxun.changeclient;
 
-import cc.tianxun.changeclient.feature.BooleanFeature;
-import cc.tianxun.changeclient.feature.Feature;
-import cc.tianxun.changeclient.feature.FloatFeature;
-import cc.tianxun.changeclient.feature.IntegerFeature;
+import cc.tianxun.changeclient.feature.*;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.FloatArgumentType;
@@ -62,8 +59,10 @@ public class ChangeClient implements ClientModInitializer {
 			for (Feature<?> feature : ChangeFeaturesConfig.features) {
 				RequiredArgumentBuilder<FabricClientCommandSource, ?> arg = ClientCommands.argument("value", StringArgumentType.string());
 				switch (feature) {
-					case BooleanFeature booleanFeature ->
+					case BooleanFeature _ ->
 						arg = ClientCommands.argument("value", BoolArgumentType.bool());
+					case EnumFeature enumFeature -> {
+					}
 					case IntegerFeature integerFeature -> {
 						if (integerFeature.isLimited()) {
 							arg = ClientCommands.argument("value", IntegerArgumentType.integer(integerFeature.getMinValue(), integerFeature.getMaxValue()));
@@ -100,6 +99,7 @@ public class ChangeClient implements ClientModInitializer {
 				return 0;
 			}
 			case BooleanFeature feature1 -> feature1.setValue(BoolArgumentType.getBool(context, "value"));
+			case StringFeature feature1 -> feature1.setValue(StringArgumentType.getString(context, "value"));
 			case IntegerFeature feature1 -> feature1.setValue(IntegerArgumentType.getInteger(context, "value"));
 			case FloatFeature feature1 -> feature1.setValue(FloatArgumentType.getFloat(context, "value"));
 			default -> {}

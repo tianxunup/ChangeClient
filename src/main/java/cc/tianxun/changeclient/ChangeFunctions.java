@@ -2,12 +2,20 @@ package cc.tianxun.changeclient;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.phys.Vec3;
 
 public class ChangeFunctions {
+	private static final EntityType<?>[] boats = {
+		EntityTypes.ACACIA_BOAT,EntityTypes.BIRCH_BOAT,EntityTypes.DARK_OAK_BOAT,
+		EntityTypes.JUNGLE_BOAT,EntityTypes.SPRUCE_BOAT,
+		EntityTypes.OAK_BOAT,EntityTypes.CHERRY_BOAT,EntityTypes.PALE_OAK_BOAT,
+	};
+
 	public static void boatFly(Minecraft client) {
 		Entity vehicle = client.player.getVehicle();
-		if (vehicle == null) {
+		if (vehicle == null || !isBoat(vehicle.getType())) {
 			return;
 		}
 		Vec3 vec = vehicle.getDeltaMovement();
@@ -24,6 +32,15 @@ public class ChangeFunctions {
 			z *= multiplier;
 		}
 		vehicle.setDeltaMovement(x, y, z);
+	}
+
+	private static boolean isBoat(EntityType<?> type) {
+		for (EntityType<?> boat : boats) {
+			if (boat.equals(type)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	private static double calculateMultiplier(double velocity) {
 		if (velocity <= 0.0D)

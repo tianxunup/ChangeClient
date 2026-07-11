@@ -25,7 +25,7 @@ public abstract class Feature<T> {
 	}
 
 	public boolean isDefault() {
-		return value == defaultValue;
+		return value.equals(defaultValue);
 	}
 	public void setDefault() {
 		this.value = this.defaultValue;
