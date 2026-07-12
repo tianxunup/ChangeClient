@@ -107,11 +107,12 @@ public class ChangeClient implements ClientModInitializer {
 			return 1;
 		});
 		for (String item : feature.getEnumValues()) {
-			lireral.then(ClientCommands.literal(item).executes(context -> {
+			lireral.then(ClientCommands.literal(item).executes(_ -> {
 				feature.setValue(item);
 				return 1;
 			}));
 		}
+		command.then(lireral);
 	}
 	public int setCommandExecute(CommandContext<FabricClientCommandSource> context) {
 		String name = context.getLastChild().getInput().split(" ",3)[1];
