@@ -1,6 +1,7 @@
 package cc.tianxun.changeclient.feature;
 
 import cc.tianxun.changeclient.ChangeClient;
+import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,15 @@ public class EnumFeature extends StringFeature {
 	}
 	public List<String> getEnumValues() {
 		return enumValues;
+	}
+	public Component getTranslatableValue() {
+		return getTranslatableValue(this.currentIndex);
+	}
+	public Component getTranslatableValue(int index) {
+		return Component.translatable("feature.change_client.feature." + enumValues.get(index));
+	}
+	public Component getTranslatableValue(String id) {
+		return Component.translatable("feature.change_client.feature." + id);
 	}
 
 	@Override

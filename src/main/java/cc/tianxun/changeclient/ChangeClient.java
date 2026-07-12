@@ -107,8 +107,9 @@ public class ChangeClient implements ClientModInitializer {
 			return 1;
 		});
 		for (String item : feature.getEnumValues()) {
-			lireral.then(ClientCommands.literal(item).executes(_ -> {
+			lireral.then(ClientCommands.literal(item).executes(context -> {
 				feature.setValue(item);
+				context.getSource().sendFeedback(Component.translatable("command.change.sucess", item ,feature.getTranslatableName(),feature.getTranslatableValue()));
 				return 1;
 			}));
 		}
