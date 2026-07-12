@@ -16,11 +16,13 @@ public class ChangeFeaturesConfig {
 	public static final BooleanFeature BOAT_FLY = new BooleanFeature("boat_fly", false);
 	public static final FloatFeature BOAT_SPEED = new FloatFeature("boat_speed", 12.0f, 0.0f, 1000.0f);
 	public static final FloatFeature BOAT_VERTICAL_SPEED = new FloatFeature("boat_vertical_speed", 0.4f, 0.0f, 10.0f);
+	public static final BooleanFeature AIR_FLY = new BooleanFeature("air_fly", false);
 
 	static {
 		features.add(BOAT_FLY);
 		features.add(BOAT_SPEED);
 		features.add(BOAT_VERTICAL_SPEED);
+		features.add(AIR_FLY);
 	}
 
 	public static Feature<?> getFeatureByName(String name) {

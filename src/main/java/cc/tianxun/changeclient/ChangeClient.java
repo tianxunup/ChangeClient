@@ -21,11 +21,13 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import org.jspecify.annotations.NonNull;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Objects;
 
 @Environment(EnvType.CLIENT)
 public class ChangeClient implements ClientModInitializer {
@@ -57,38 +59,59 @@ public class ChangeClient implements ClientModInitializer {
 		ClientCommandRegistrationCallback.EVENT.register((dispatcher, _) -> {
 			LiteralArgumentBuilder<FabricClientCommandSource> command = ClientCommands.literal("change");
 			for (Feature<?> feature : ChangeFeaturesConfig.features) {
-				RequiredArgumentBuilder<FabricClientCommandSource, ?> arg = ClientCommands.argument("value", StringArgumentType.string());
-				switch (feature) {
-					case BooleanFeature _ ->
-						arg = ClientCommands.argument("value", BoolArgumentType.bool());
-					case EnumFeature enumFeature -> {
-					}
-					case IntegerFeature integerFeature -> {
-						if (integerFeature.isLimited()) {
-							arg = ClientCommands.argument("value", IntegerArgumentType.integer(integerFeature.getMinValue(), integerFeature.getMaxValue()));
-						}
-						else {
-							arg = ClientCommands.argument("value", IntegerArgumentType.integer());
-						}
-					}
-					case FloatFeature floatFeature -> {
-						if (floatFeature.isLimited()) {
-							arg =ClientCommands.argument("value", FloatArgumentType.floatArg(floatFeature.getMinValue(), floatFeature.getMaxValue()));
-						}
-						else {
-							arg = ClientCommands.argument("value", FloatArgumentType.floatArg());
-						}
-					}
-					default -> {}
+				if (feature instanceof EnumFeature) {
+					registerEnumFeatures(command, (EnumFeature) feature);
 				}
-				command.then(ClientCommands.literal(feature.getId()).executes(context -> {
-					context.getSource().sendFeedback(Component.translatable("command.change.get",
-						feature.getId(),feature.getTranslatableName(),feature.getValue().toString()));
-					return 1;
-				}).then(arg.executes(this::setCommandExecute)));
+				else {
+					command.then(ClientCommands.literal(feature.getId()).executes(context -> {
+						context.getSource().sendFeedback(Component.translatable("command.change.get",
+							feature.getId(), feature.getTranslatableName(), feature.getValue().toString()));
+						return 1;
+					}).then(getArgument(feature).executes(this::setCommandExecute)));
+				}
 			}
 			dispatcher.register(command);
 		});
+	}
+
+	private static @NonNull RequiredArgumentBuilder<FabricClientCommandSource, ?> getArgument(Feature<?> feature) {
+		RequiredArgumentBuilder<FabricClientCommandSource, ?> arg = ClientCommands.argument("value", StringArgumentType.string());
+		switch (feature) {
+			case BooleanFeature _ ->
+				arg = ClientCommands.argument("value", BoolArgumentType.bool());
+			case IntegerFeature integerFeature -> {
+				if (integerFeature.isLimited()) {
+					arg = ClientCommands.argument("value", IntegerArgumentType.integer(integerFeature.getMinValue(), integerFeature.getMaxValue()));
+				}
+				else {
+					arg = ClientCommands.argument("value", IntegerArgumentType.integer());
+				}
+			}
+			case FloatFeature floatFeature -> {
+				if (floatFeature.isLimited()) {
+					arg =ClientCommands.argument("value", FloatArgumentType.floatArg(floatFeature.getMinValue(), floatFeature.getMaxValue()));
+				}
+				else {
+					arg = ClientCommands.argument("value", FloatArgumentType.floatArg());
+				}
+			}
+			default -> {}
+		}
+		return arg;
+	}
+
+	private void registerEnumFeatures(LiteralArgumentBuilder<FabricClientCommandSource> command, EnumFeature feature) {
+		LiteralArgumentBuilder<FabricClientCommandSource> lireral = ClientCommands.literal(feature.getId()).executes(context -> {
+			context.getSource().sendFeedback(Component.translatable("command.change.get",
+				feature.getId(), feature.getTranslatableName(), feature.getValue()));
+			return 1;
+		});
+		for (String item : feature.getEnumValues()) {
+			lireral.then(ClientCommands.literal(item).executes(context -> {
+				feature.setValue(item);
+				return 1;
+			}));
+		}
 	}
 	public int setCommandExecute(CommandContext<FabricClientCommandSource> context) {
 		String name = context.getLastChild().getInput().split(" ",3)[1];
@@ -115,14 +138,17 @@ public class ChangeClient implements ClientModInitializer {
 	}
 
 	private void tick(Minecraft client) {
-		while (changeGuiKey.consumeClick()) {
-			// pass
-		}
 		if (client.player == null) {
 			return;
 		}
 		if (ChangeFeaturesConfig.BOAT_FLY.getValue()) {
 			ChangeFunctions.boatFly(client);
+		}
+		if (ChangeFeaturesConfig.AIR_FLY.getValue()) {
+			client.player.getAbilities().mayfly = true;
+		}
+		else if (Objects.requireNonNull(client.player.gameMode()).isSurvival()) {
+			client.player.getAbilities().mayfly = false;
 		}
 	}
 
