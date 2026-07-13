@@ -14,8 +14,8 @@ import java.util.List;
 public class ChangeFeaturesConfig {
 	public static final List<Feature<?>> features = new ArrayList<>();
 	public static final BooleanFeature BOAT_FLY = new BooleanFeature("boat_fly", false);
-	public static final FloatFeature BOAT_SPEED = new FloatFeature("boat_speed", 12.0f, 0.0f, 1000.0f);
-	public static final FloatFeature BOAT_VERTICAL_SPEED = new FloatFeature("boat_vertical_speed", 0.4f, 0.0f, 10.0f);
+	public static final FloatFeature BOAT_SPEED = new FloatFeature("boat_speed", 14.0f, 0.0f, 1024.0f);
+	public static final FloatFeature BOAT_VERTICAL_SPEED = new FloatFeature("boat_vertical_speed", 10.4f, 0.0f, 45.0f);
 	public static final BooleanFeature AIR_FLY = new BooleanFeature("air_fly", false);
 
 	static {

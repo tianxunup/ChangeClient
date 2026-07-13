@@ -21,13 +21,13 @@ public class ChangeFunctions {
 		Vec3 vec = vehicle.getDeltaMovement();
 		double x = vec.x, y = 0, z = vec.z;
 		if (client.options.keyJump.isDown()) {
-			y += ChangeFeaturesConfig.BOAT_VERTICAL_SPEED.getValue();
+			y += ChangeFeaturesConfig.BOAT_VERTICAL_SPEED.getValue()/20;
 		}
 		if (ChangeClient.boatFlyDeclineKey.isDown()) {
-			y -= ChangeFeaturesConfig.BOAT_VERTICAL_SPEED.getValue();
+			y -= ChangeFeaturesConfig.BOAT_VERTICAL_SPEED.getValue()/20;
 		}
 		if (client.options.keyUp.isDown()) {
-			double multiplier = calculateMultiplier(ChangeFeaturesConfig.BOAT_SPEED.getValue());
+			double multiplier = ChangeFeaturesConfig.BOAT_SPEED.getValue()/20.0d/Math.sqrt(x*x+z*z);
 			x *= multiplier;
 			z *= multiplier;
 		}
@@ -41,17 +41,5 @@ public class ChangeFunctions {
 			}
 		}
 		return false;
-	}
-	private static double calculateMultiplier(double velocity) {
-		if (velocity <= 0.0D)
-			return 0.0D;
-		double logInput = velocity - 8.0D + 11.9072D;
-		if (logInput <= 0.0D)
-			return 1.0D;
-		double term1 = -5.33893D * Math.pow(Math.log(logInput), -3.31832D);
-		double base = term1 + 1.26253D;
-		if (base < 0.0D)
-			return 1.0D;
-		return Math.pow(base, 0.470998D);
 	}
 }
