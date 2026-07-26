@@ -28,6 +28,17 @@ public class IntegerFeature extends NumberFeature<Integer> {
 	}
 
 	@Override
+	public boolean isValid(String value) {
+		try {
+			int iv = Integer.parseInt(value);
+			return iv >= this.getMinValue() && iv <= this.getMaxValue();
+		}
+		catch (NumberFormatException e) {
+			return false;
+		}
+	}
+
+	@Override
 	public void createCommands(LiteralArgumentBuilder<FabricClientCommandSource> command) {
 		LiteralArgumentBuilder<FabricClientCommandSource> sub = ClientCommands.literal(this.getId()).executes(this::getCommand);
 		if (this.isLimited()) {

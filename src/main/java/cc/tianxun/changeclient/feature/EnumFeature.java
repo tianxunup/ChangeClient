@@ -94,12 +94,14 @@ public class EnumFeature extends StringFeature {
 		public Builder(String id) {
 			this.id = id;
 		}
-		public void addEnumValue(String value) {
+		public Builder add(String value) {
 			this.enumValues.add(value);
+			return this;
 		}
 
-		public void setDefaultIndex(int defaultIndex) {
+		public Builder setDefaultIndex(int defaultIndex) {
 			this.defaultIndex = defaultIndex;
+			return this;
 		}
 
 		public EnumFeature build() {

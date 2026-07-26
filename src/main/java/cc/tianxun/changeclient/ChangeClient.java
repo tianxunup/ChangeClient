@@ -10,6 +10,7 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.minecraft.client.KeyMapping;
@@ -39,6 +40,13 @@ public class ChangeClient implements ClientModInitializer {
 		boatFlyDeclineKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.change.boat_fly_decline",
 			InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_DOWN, KEY_CATEGORY));
 		ClientTickEvents.END_CLIENT_TICK.register(this::tick);
+		ClientLifecycleEvents.CLIENT_STOPPING.register(_ -> {
+			try {
+				ChangeFeaturesConfig.saveConfig();
+			} catch (IOException e) {
+				ChangeClient.LOGGER.error("Couldn't save config file!",e);
+			}
+		});
 		try {
 			ChangeFeaturesConfig.loadConfig();
 		}
@@ -80,6 +88,9 @@ public class ChangeClient implements ClientModInitializer {
 	}
 
 	public static float getServerTps() {
+		if (Minecraft.getInstance().isLocalServer() && Minecraft.getInstance().getSingleplayerServer() != null) {
+			return Minecraft.getInstance().getSingleplayerServer().tickRateManager().tickrate();
+		}
 		return serverTps;
 	}
 

@@ -28,6 +28,17 @@ public class FloatFeature extends NumberFeature<Float> {
 	}
 
 	@Override
+	public boolean isValid(String value) {
+		try {
+			float iv = Float.parseFloat(value);
+			return iv >= this.getMinValue() && iv <= this.getMaxValue();
+		}
+		catch (NumberFormatException e) {
+			return false;
+		}
+	}
+
+	@Override
 	public void createCommands(LiteralArgumentBuilder<FabricClientCommandSource> command) {
 		LiteralArgumentBuilder<FabricClientCommandSource> sub = ClientCommands.literal(this.getId()).executes(this::getCommand);
 		if (this.isLimited()) {

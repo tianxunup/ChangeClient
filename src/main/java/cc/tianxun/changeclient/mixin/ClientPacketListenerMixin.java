@@ -3,6 +3,7 @@ package cc.tianxun.changeclient.mixin;
 import cc.tianxun.changeclient.ChangeClient;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -18,6 +19,9 @@ public class ClientPacketListenerMixin{
 
 	@Inject(method = "handleSetTime", at = @At("RETURN"))
 	private void handleSetTime(CallbackInfo ci){
+		if (Minecraft.getInstance().isLocalServer()){
+			return;
+		}
 		if (last == -1){
 			last = System.currentTimeMillis();
 		}

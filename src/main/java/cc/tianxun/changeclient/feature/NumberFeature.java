@@ -44,6 +44,8 @@ public abstract class NumberFeature<T extends Number> extends Feature<T> {
 		}
 	}
 
+	public abstract boolean isValid(String value);
+
 	@Override
 	protected int getCommand(CommandContext<FabricClientCommandSource> context) {
 		context.getSource().sendFeedback(Component.translatable("command.change.get",this.getId(),this.getName(),this.getValue()));

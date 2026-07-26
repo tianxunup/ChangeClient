@@ -1,9 +1,6 @@
 package cc.tianxun.changeclient;
 
-import cc.tianxun.changeclient.feature.BooleanFeature;
-import cc.tianxun.changeclient.feature.Feature;
-import cc.tianxun.changeclient.feature.FloatFeature;
-import cc.tianxun.changeclient.feature.IntegerFeature;
+import cc.tianxun.changeclient.feature.*;
 import com.google.gson.stream.JsonReader;
 
 import java.io.*;
@@ -52,10 +49,11 @@ public class ChangeFeaturesConfig {
 				case BooleanFeature booleanFeature -> booleanFeature.setValue(reader.nextBoolean());
 				case FloatFeature floatFeature -> floatFeature.setValue((float) reader.nextDouble());
 				case IntegerFeature integerFeature -> integerFeature.setValue(reader.nextInt());
+				case StringFeature stringFeature -> stringFeature.setValue(reader.nextString());
 				default -> {}
 			}
-
 		}
+		ChangeClient.LOGGER.info("Loaded {} features.",features.size());
 	}
 	public static void saveConfig() throws IOException {
 		File dir = new File(String.format("config/%s", ChangeClient.MOD_ID));
@@ -72,7 +70,12 @@ public class ChangeFeaturesConfig {
 		writer.write("{\n");
 		int index = 1;
 		for (Feature<?> feature : features) {
-			writer.write(String.format("\t\"%s\": %s", feature.getId(),feature.getValue().toString()));
+			if (feature.getValue() instanceof String) {
+				writer.write(String.format("\t\"%s\": \"%s\"", feature.getId(), feature.getValue().toString()));
+			}
+			else {
+				writer.write(String.format("\t\"%s\": %s", feature.getId(), feature.getValue().toString()));
+			}
 			if (index < features.size()) {
 				writer.write(',');
 			}
