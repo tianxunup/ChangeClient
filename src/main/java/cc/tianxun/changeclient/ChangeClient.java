@@ -1,6 +1,7 @@
 package cc.tianxun.changeclient;
 
 import cc.tianxun.changeclient.feature.Feature;
+import cc.tianxun.changeclient.gui.screens.ChangeGui;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.fabricmc.api.ClientModInitializer;
@@ -59,6 +60,9 @@ public class ChangeClient implements ClientModInitializer {
 	}
 
 	private void tick(Minecraft client) {
+		while (changeGuiKey.consumeClick()) {
+			client.setScreenAndShow(new ChangeGui());
+		}
 		if (client.player == null || client.player.gameMode() == null) {
 			return;
 		}

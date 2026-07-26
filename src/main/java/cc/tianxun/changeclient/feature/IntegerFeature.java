@@ -36,6 +36,7 @@ public class IntegerFeature extends NumberFeature<Integer> {
 		else {
 			sub.then(ClientCommands.argument("value", IntegerArgumentType.integer()).executes(this::setCommand));
 		}
+		command.then(sub);
 	}
 
 	@Override

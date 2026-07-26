@@ -36,6 +36,7 @@ public class FloatFeature extends NumberFeature<Float> {
 		else {
 			sub.then(ClientCommands.argument("value", FloatArgumentType.floatArg()).executes(this::setCommand));
 		}
+		command.then(sub);
 	}
 
 	@Override
