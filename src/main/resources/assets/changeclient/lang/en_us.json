@@ -12,7 +12,6 @@
   "command.change.get.true": "The feature %s(%s) is ON",
   "command.change.get.false": "The feature %s(%s) is OFF",
   "command.change.get.enum": "The feature %s(%s) is %s(%s)",
-  "command.change.fail.invalid_key": "Invalid key: %s",
   "command.change.set.sucess": "The config %s(%s) has been set to %s",
   "command.change.set.sucess.enum": "The config %s(%s) has been set to %s(%s)",
   "command.change.set.sucess.true": "The feature %s(%s) has been trun ON",
