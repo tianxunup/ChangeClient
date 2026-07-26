@@ -30,7 +30,7 @@ public class ChangeGui extends Screen {
 				current -> this.buttonClicked(current,feature),
 				this.font
 			);
-			this.grid.addChild(new StringWidget(feature.getTranslatableName(),this.font),0,index);
+			this.grid.addChild(new StringWidget(feature.getName(),this.font),0,index);
 			this.grid.addChild(button,1,index);
 			index++;
 		}

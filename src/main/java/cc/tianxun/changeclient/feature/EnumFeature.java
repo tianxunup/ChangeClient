@@ -1,6 +1,10 @@
 package cc.tianxun.changeclient.feature;
 
 import cc.tianxun.changeclient.ChangeClient;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
@@ -59,6 +63,28 @@ public class EnumFeature extends StringFeature {
 			ChangeClient.LOGGER.warn("[{}] Invalid value: {}", this.getId(), value);
 		}
 
+	}
+
+	@Override
+	public void createCommands(LiteralArgumentBuilder<FabricClientCommandSource> command) {
+		LiteralArgumentBuilder<FabricClientCommandSource> sub = ClientCommands.literal(this.getId()).executes(this::getCommand);
+		int index = 0;
+		for (String value : this.enumValues) {
+			int finalIndex = index;
+			sub.then(ClientCommands.literal(value).executes(context -> {
+				this.setCurrentIndex(finalIndex);
+				context.getSource().sendFeedback(Component.translatable("command.change.set.sucess.enum",this.getId(),this.getName(),this.getValue(),this.getTranslatableValue()));
+				return 1;
+			}));
+			index++;
+		}
+		command.then(sub);
+	}
+
+	@Override
+	protected int getCommand(CommandContext<FabricClientCommandSource> context) {
+		context.getSource().sendFeedback(Component.translatable("command.change.get.enum",this.getId(),this.getName(),this.getValue(),this.getTranslatableValue()));
+		return 1;
 	}
 
 	public static class Builder {

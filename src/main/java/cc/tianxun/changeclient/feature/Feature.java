@@ -1,5 +1,8 @@
 package cc.tianxun.changeclient.feature;
 
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.network.chat.Component;
 
 public abstract class Feature<T> {
@@ -14,7 +17,7 @@ public abstract class Feature<T> {
 	public String getId() {
 		return id;
 	}
-	public Component getTranslatableName() {
+	public Component getName() {
 		return Component.translatable("changeclient.feature." + id);
 	}
 	public T getValue() {
@@ -39,4 +42,10 @@ public abstract class Feature<T> {
 			this.value = value;
 		}
 	}
+
+	public abstract void createCommands(LiteralArgumentBuilder<FabricClientCommandSource> command);
+
+	protected abstract int getCommand(CommandContext<FabricClientCommandSource> context);
+
+	protected abstract int setCommand(CommandContext<FabricClientCommandSource> context);
 }

@@ -1,5 +1,9 @@
 package cc.tianxun.changeclient.feature;
 
+import com.mojang.brigadier.context.CommandContext;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.minecraft.network.chat.Component;
+
 public abstract class NumberFeature<T extends Number> extends Feature<T> {
 	private final boolean limited;
 	private final T minValue;
@@ -38,5 +42,11 @@ public abstract class NumberFeature<T extends Number> extends Feature<T> {
 		else {
 			this.value = value;
 		}
+	}
+
+	@Override
+	protected int getCommand(CommandContext<FabricClientCommandSource> context) {
+		context.getSource().sendFeedback(Component.translatable("command.change.get",this.getId(),this.getName(),this.getValue()));
+		return 1;
 	}
 }

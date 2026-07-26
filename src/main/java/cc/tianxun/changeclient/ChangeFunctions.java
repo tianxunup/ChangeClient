@@ -14,20 +14,24 @@ public class ChangeFunctions {
 	};
 
 	public static void boatFly(Minecraft client) {
+		if (client.player == null) {
+			return;
+		}
 		Entity vehicle = client.player.getVehicle();
 		if (vehicle == null || !isBoat(vehicle.getType())) {
 			return;
 		}
+		float tps = ChangeClient.getServerTps();
 		Vec3 vec = vehicle.getDeltaMovement();
 		double x = vec.x, y = 0, z = vec.z;
 		if (client.options.keyJump.isDown()) {
-			y += ChangeFeaturesConfig.BOAT_VERTICAL_SPEED.getValue()/20;
+			y += ChangeFeaturesConfig.BOAT_VERTICAL_SPEED.getValue()/tps;
 		}
 		if (ChangeClient.boatFlyDeclineKey.isDown()) {
-			y -= ChangeFeaturesConfig.BOAT_VERTICAL_SPEED.getValue()/20;
+			y -= ChangeFeaturesConfig.BOAT_VERTICAL_SPEED.getValue()/tps;
 		}
 		if (client.options.keyUp.isDown()) {
-			double multiplier = ChangeFeaturesConfig.BOAT_SPEED.getValue()/20.0d/Math.sqrt(x*x+z*z);
+			double multiplier = ChangeFeaturesConfig.BOAT_SPEED.getValue()/tps/Math.sqrt(x*x+z*z);
 			x *= multiplier;
 			z *= multiplier;
 		}
