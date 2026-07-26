@@ -80,10 +80,8 @@ public class ChangeClient implements ClientModInitializer {
 		if (ChangeFeaturesConfig.AIR_FLY.getValue()) {
 			client.player.getAbilities().mayfly = true;
 		}
-		else {
-			if (client.player.gameMode().isSurvival()) {
+		else if (client.player.gameMode().isSurvival()) {
 				client.player.getAbilities().mayfly = false;
-			}
 		}
 	}
 
