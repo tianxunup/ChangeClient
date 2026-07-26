@@ -81,7 +81,7 @@ public class ChangeClient implements ClientModInitializer {
 			client.player.getAbilities().mayfly = true;
 		}
 		else {
-			if (!client.player.gameMode().isSurvival()) {
+			if (client.player.gameMode().isSurvival()) {
 				client.player.getAbilities().mayfly = false;
 			}
 		}
