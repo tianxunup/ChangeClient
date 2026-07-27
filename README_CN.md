@@ -4,11 +4,16 @@
 
 最新发布：*无*
 
-最新快照：`alpha1`
+最新快照：`alpha2`
 
 支持版本：26.2
 
 只有对于最新Minecraft正式版的版本会持续获得支持和开发。其它版本不会有除了安全更新以外其他更新。
+
+目录：
++ [功能](./README_CN.md#功能)
++ [命令](./README_CN.md#命令)
++ [GUI](./README_CN.md#gui)
 
 相关连接:
 + [Bilibili](https://space.bilibili.com/627871340)
@@ -61,6 +66,9 @@
 用法: `\change <id> [value]`
 + `<id>`: **必填**。功能的 ID。
 + `[value]`: **选填**。如果此参数为空，命令将发送功能配置的值。否则它将把配置设置为你输入的值。
+
+其它命令:
++ `/getservertps`: 获取服务器TPS。
 
 ## GUI
 按`Backspace`来打开GUI(可以在按键绑定中更改)。在GUI中配置功能设置。
