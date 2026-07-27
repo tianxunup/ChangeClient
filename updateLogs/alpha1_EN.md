@@ -1,4 +1,4 @@
-English|[简体中文](./alpha1_EN.md)
+English|[简体中文](./alpha1.md)
 # Alpha1 Update Log
 
 (As you see it's an example for update logs)

@@ -10,21 +10,20 @@ import java.util.List;
 
 public class ChangeFeaturesConfig {
 	public static final List<Feature<?>> features = new ArrayList<>();
-	public static final BooleanFeature BOAT_FLY = new BooleanFeature("boat_fly", false);
-	public static final FloatFeature BOAT_SPEED = new FloatFeature("boat_speed", 14.0f, 0.0f, 1024.0f);
-	public static final FloatFeature BOAT_VERTICAL_SPEED = new FloatFeature("boat_vertical_speed", 10.4f, 0.0f, 45.0f);
-	public static final BooleanFeature AIR_FLY = new BooleanFeature("air_fly", false);
+	public static final BooleanFeature BOAT_FLY = (BooleanFeature) register(new BooleanFeature("boat_fly", false));
+	public static final FloatFeature BOAT_SPEED = (FloatFeature) register(new FloatFeature("boat_speed", 14.0f, 0.0f, 1024.0f));
+	public static final FloatFeature BOAT_VERTICAL_SPEED = (FloatFeature) register(new FloatFeature("boat_vertical_speed", 10.4f, 0.0f, 45.0f));
+	public static final BooleanFeature AIR_FLY = (BooleanFeature) register(new BooleanFeature("air_fly", false));
+	public static final BooleanFeature DISABLE_PUMPKIN_BLUR = (BooleanFeature) register(new BooleanFeature("disable_pumpkin_blur", false));
 
-	static {
-		features.add(BOAT_FLY);
-		features.add(BOAT_SPEED);
-		features.add(BOAT_VERTICAL_SPEED);
-		features.add(AIR_FLY);
+	private static Feature<?> register(Feature<?> feature) {
+		features.add(feature);
+		return feature;
 	}
 
-	public static Feature<?> getFeatureByName(String name) {
+	public static Feature<?> getFeatureById(String id) {
 		for (Feature<?> feature : features) {
-			if (feature.getId().equals(name)) {
+			if (feature.getId().equals(id)) {
 				return feature;
 			}
 		}
@@ -40,7 +39,7 @@ public class ChangeFeaturesConfig {
 		reader.beginObject();
 		while (reader.hasNext()) {
 			String name = reader.nextName();
-			Feature<?> feature = getFeatureByName(name);
+			Feature<?> feature = getFeatureById(name);
 			if (feature == null) {
 				reader.skipValue();
 				continue;

@@ -8,6 +8,7 @@
   "changeclient.feature.boat_speed": "船只速度",
   "changeclient.feature.air_fly": "空中飞行",
   "changeclient.feature.boat_vertical_speed": "船只竖直速度",
+  "changeclient.feature.disable_pumpkin_blur": "禁用南瓜头纹理",
   "command.change.get": "配置%s(%s)的值是%s",
   "command.change.get.true": "功能%s(%s)当前状态是：开启",
   "command.change.get.false": "功能%s(%s)当前状态是：关闭",

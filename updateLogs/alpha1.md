@@ -1,4 +1,4 @@
-[English](./alpha1.md)|简体中文
+[English](./alpha1_EN.md)|简体中文
 # Alpha1 更新日志
 
 (如你所见这是一份更新日志的标准模板)

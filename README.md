@@ -53,6 +53,13 @@ Normal: OFF(false)
 
 When this feature is ON(true), you can fly as in the creative mode.
 
+### Disable Pumpkin Blur `disable_pumpkin_blur`
+Type: Boolean
+
+Normal: OFF(false)
+
+Disables the pumpkin blur when it's ON.
+
 ## Commands
 Main command: `\change`
 

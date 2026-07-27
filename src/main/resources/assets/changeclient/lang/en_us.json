@@ -8,6 +8,7 @@
   "changeclient.feature.boat_speed": "Boat Speed",
   "changeclient.feature.air_fly": "Air Fly",
   "changeclient.feature.boat_vertical_speed": "Boat Vertical Speed",
+  "changeclient.feature.disable_pumpkin_blur": "Disable Pumpkin Blur",
   "command.change.get": "The value of %s(%s) is %s",
   "command.change.get.true": "The feature %s(%s) is ON",
   "command.change.get.false": "The feature %s(%s) is OFF",
