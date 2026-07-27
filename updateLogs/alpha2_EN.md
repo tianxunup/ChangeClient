@@ -3,6 +3,7 @@ English|[简体中文](./alpha2.md)
 
 ## Features
 1. Added *Disable Pumpkin Blur*(`disable_pumpkin_blur`) that disables the pumpkin blur when it's ON.
+2. Added command `\getservertps`
 
 ## Fixs
 1. Fixed the bug that makes the boat have wrong speed.

@@ -13,6 +13,11 @@ Support version: 26.2
 Only the version for the lastest Minecraft release would keep being supported and devloped.
 And those for the earlier releases would not receive updates besides safety updates. 
 
+Index:
++ [Features](./README.md#features)
++ [Commands](./README.md#commands)
++ [GUI](./README.md#gui)
+
 Links: 
 + [Bilibili](https://space.bilibili.com/627871340)
 
@@ -66,6 +71,9 @@ Main command: `\change`
 Usage: `\change <id> [value]`
 + `<id>`: **Required**. The id of features.
 + `[value]`: **Optional**. If this argument is empty, the command will send the value of the feature config. Or it will set the config to the value you input.
+
+Extra commands:
++ `/getservertps`: Get the tps of the server.
 
 ## GUI
 Press `Backspace` to open the GUI(Changeable in the settings).
