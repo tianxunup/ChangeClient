@@ -1,11 +1,11 @@
-English|[简体中文](./alpha1.md)
+English|[简体中文](./alpha2.md)
 # Alpha2 Update Log
 
 ## Features
 1. Added *Disable Pumpkin Blur*(`disable_pumpkin_blur`) that disables the pumpkin blur when it's ON.
 
 ## Fixs
-None
+1. Fixed the bug that makes the boat have wrong speed.
 
 ## Optimization
 None

@@ -28,7 +28,7 @@ public class ClientPacketListenerMixin{
 		else {
 			long now = System.currentTimeMillis();
 			long delta = now - last;
-			ChangeClient.setServerTps(1000.0f / delta);
+			ChangeClient.setServerTps(20 * 1000.0f / delta);
 			last = now;
 		}
 	}

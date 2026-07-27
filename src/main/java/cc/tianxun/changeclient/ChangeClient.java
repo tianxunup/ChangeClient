@@ -15,6 +15,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
@@ -64,6 +65,10 @@ public class ChangeClient implements ClientModInitializer {
 				feature.createCommands(command);
 			}
 			dispatcher.register(command);
+			dispatcher.register(ClientCommands.literal("getservertps").executes(context -> {
+				context.getSource().sendFeedback(Component.translatable("command.getservertps",getServerTps()));
+				return 1;
+			}));
 		});
 	}
 

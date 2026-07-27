@@ -16,5 +16,6 @@
   "command.change.set.sucess": "配置%s(%s)已经被设置为%s",
   "command.change.set.sucess.enum": "配置%s(%s)已经被设置为%s(%s)",
   "command.change.set.sucess.true": "功能%s(%s)已开启",
-  "command.change.set.sucess.false": "功能%s(%s)已关闭"
+  "command.change.set.sucess.false": "功能%s(%s)已关闭",
+  "command.getservertps": "服务器TPS: %d"
 }
