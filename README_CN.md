@@ -11,9 +11,9 @@
 只有对于最新Minecraft正式版的版本会持续获得支持和开发。其它版本不会有除了安全更新以外其他更新。
 
 目录：
-+ [功能](./README_CN.md#功能)
-+ [命令](./README_CN.md#命令)
-+ [GUI](./README_CN.md#gui)
++ [功能](#功能)
++ [命令](#命令)
++ [GUI](#gui)
 
 相关连接:
 + [Bilibili](https://space.bilibili.com/627871340)

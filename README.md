@@ -14,9 +14,9 @@ Only the version for the lastest Minecraft release would keep being supported an
 And those for the earlier releases would not receive updates besides safety updates. 
 
 Index:
-+ [Features](./README.md#features)
-+ [Commands](./README.md#commands)
-+ [GUI](./README.md#gui)
++ [Features](#features)
++ [Commands](#commands)
++ [GUI](#gui)
 
 Links: 
 + [Bilibili](https://space.bilibili.com/627871340)
