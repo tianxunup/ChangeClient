@@ -7,10 +7,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.components.ContainerObjectSelectionList;
-import net.minecraft.client.gui.components.CycleButton;
-import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.*;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.network.chat.Component;
@@ -64,20 +61,30 @@ public class FeaturesList extends ContainerObjectSelectionList<FeaturesList.Entr
 	@Environment(EnvType.CLIENT)
 	public abstract static class FeatureEntry extends Entry {
 		protected final Feature<?> feature;
+		protected final Button resetButton;
 
 		public FeatureEntry(Feature<?> feature) {
 			super(feature.getName());
 			this.feature = feature;
+			this.resetButton = PlainTextButton.builder(Component.translatable("gui.changeclient.reset"), button -> {
+				this.feature.setDefault();
+				this.refresh();
+			}).bounds(0,0,80,itemHeight-8).build();
 		}
 		@Override
 		public void extractContent(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, boolean hovered, float a) {
 			graphics.text(client.font, this.name, this.getContentX(), this.getContentYMiddle()-4, RGBAColors.WHITE);
 			if (!this.children.isEmpty()) {
-				this.children.getFirst().setX(this.getContentRight() - 80);
+				this.children.getFirst().setX(this.getContentRight() - 100);
 				this.children.getFirst().setY(this.getContentY() + 4);
 				this.children.getFirst().extractRenderState(graphics, mouseX, mouseY, a);
 			}
+			this.resetButton.setX(this.getContentX() - 92 + itemWidth);
+			this.resetButton.setY(this.getContentY() + 4);
+			this.resetButton.extractRenderState(graphics, mouseX, mouseY, a);
 		}
+
+		protected abstract void refresh();
 
 	}
 
@@ -87,9 +94,14 @@ public class FeaturesList extends ContainerObjectSelectionList<FeaturesList.Entr
 
 		public BooleanEntry(BooleanFeature feature) {
 			super(feature);
-			checkbox = CycleButton.onOffBuilder(feature.getValue()).displayOnlyValue().create(10,5,itemWidth,itemHeight-10,feature.getName(),
+			checkbox = CycleButton.onOffBuilder(feature.getValue()).displayOnlyValue().create(10,5,itemWidth,itemHeight-8,feature.getName(),
 				(_, value) -> feature.setValue(value));
 			this.children.add(checkbox);
+		}
+
+		@Override
+		protected void refresh() {
+			this.checkbox.setValue((Boolean) this.feature.getValue());
 		}
 	}
 	@Environment(EnvType.CLIENT)
@@ -116,6 +128,11 @@ public class FeaturesList extends ContainerObjectSelectionList<FeaturesList.Entr
 			});
 			this.children.add(input);
 		}
+
+		@Override
+		protected void refresh() {
+			this.input.setValue(feature.getValue().toString());
+		}
 	}
 
 	@Environment(EnvType.CLIENT)
@@ -129,6 +146,11 @@ public class FeaturesList extends ContainerObjectSelectionList<FeaturesList.Entr
 			this.input.setResponder(feature::setValue);
 			this.children.add(input);
 		}
+
+		@Override
+		protected void refresh() {
+			this.input.setValue(feature.getValue().toString());
+		}
 	}
 	@Environment(EnvType.CLIENT)
 	public static class EnumEntry extends FeatureEntry{
@@ -141,6 +163,11 @@ public class FeaturesList extends ContainerObjectSelectionList<FeaturesList.Entr
 			this.checkbox = builder.create(0,4,itemWidth,itemHeight-8,feature.getName(),(_,value) -> feature.setValue(value));
 			this.checkbox.setValue(feature.getValue());
 			this.children.add(checkbox);
+		}
+
+		@Override
+		protected void refresh() {
+			this.checkbox.setValue(feature.getValue().toString());
 		}
 	}
 }

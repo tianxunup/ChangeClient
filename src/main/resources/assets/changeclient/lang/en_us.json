@@ -17,5 +17,6 @@
   "command.change.set.sucess.enum": "The config %s(%s) has been set to %s(%s)",
   "command.change.set.sucess.true": "The feature %s(%s) has been trun ON",
   "command.change.set.sucess.false": "The feature %s(%s) has been trun OFF",
-  "command.getservertps": "Server TPS: %d"
+  "command.getservertps": "Server TPS: %d",
+  "gui.changeclient.reset": "Reset"
 }
