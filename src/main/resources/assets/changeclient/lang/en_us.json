@@ -2,13 +2,19 @@
   "gui.changeclient.main": "Chang'e Client GUI",
   "gui.changeclient.close": "Close",
   "key.category.changeclient.main": "Chang'e Client",
+  "gui.changeclient.reset": "Reset",
   "key.change.gui": "Open GUI",
   "key.change.boat_fly_decline": "Boat Decline",
   "changeclient.feature.boat_fly": "Boat Fly",
+  "changeclient.feature.boat_fly.description": "When this feature is ON(true), you can fly when you're rowing a boat.",
   "changeclient.feature.boat_speed": "Boat Speed",
+  "changeclient.feature.boat_speed.description": "It affects the speed of the boat.",
   "changeclient.feature.air_fly": "Air Fly",
+  "changeclient.feature.air_fly.description": "When this feature is ON(true), you can fly as in the creative mode.",
   "changeclient.feature.boat_vertical_speed": "Boat Vertical Speed",
+  "changeclient.feature.boat_vertical_speed.description": "It affects the vertical speed of the boat\n(the rising spped when the JumpKey is Down and the descline speed when the descline key is DOWN).",
   "changeclient.feature.disable_pumpkin_blur": "Disable Pumpkin Blur",
+  "changeclient.feature.disable_pumpkin_blur.description": "Disables the pumpkin blur when it's ON.",
   "command.change.get": "The value of %s(%s) is %s",
   "command.change.get.true": "The feature %s(%s) is ON",
   "command.change.get.false": "The feature %s(%s) is OFF",
@@ -17,6 +23,5 @@
   "command.change.set.sucess.enum": "The config %s(%s) has been set to %s(%s)",
   "command.change.set.sucess.true": "The feature %s(%s) has been trun ON",
   "command.change.set.sucess.false": "The feature %s(%s) has been trun OFF",
-  "command.getservertps": "Server TPS: %d",
-  "gui.changeclient.reset": "Reset"
+  "command.getservertps": "Server TPS: %d"
 }

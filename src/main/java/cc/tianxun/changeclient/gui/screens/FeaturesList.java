@@ -1,5 +1,6 @@
 package cc.tianxun.changeclient.gui.screens;
 
+import cc.tianxun.changeclient.ChangeClient;
 import cc.tianxun.changeclient.ChangeFeaturesConfig;
 import cc.tianxun.changeclient.feature.*;
 import cc.tianxun.changeclient.util.RGBAColors;
@@ -11,6 +12,7 @@ import net.minecraft.client.gui.components.*;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
@@ -62,25 +64,33 @@ public class FeaturesList extends ContainerObjectSelectionList<FeaturesList.Entr
 	public abstract static class FeatureEntry extends Entry {
 		protected final Feature<?> feature;
 		protected final Button resetButton;
+		private static final MutableComponent resetText = Component.translatable("gui.changeclient.reset");
 
 		public FeatureEntry(Feature<?> feature) {
 			super(feature.getName());
 			this.feature = feature;
-			this.resetButton = PlainTextButton.builder(Component.translatable("gui.changeclient.reset"), button -> {
+			this.resetButton = Button.builder(resetText, _ -> {
+				ChangeClient.LOGGER.info("Reset {}",this.feature.getId());
 				this.feature.setDefault();
 				this.refresh();
-			}).bounds(0,0,80,itemHeight-8).build();
+			}).bounds(0,0,40,itemHeight-8).createNarration(_->resetText).build();
+		}
+		protected void finalInitize() {
+			this.children.add(this.resetButton);
+			this.children.getFirst().setTooltip(Tooltip.create(feature.getDescription()));
+			this.refresh();
 		}
 		@Override
 		public void extractContent(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, boolean hovered, float a) {
-			graphics.text(client.font, this.name, this.getContentX(), this.getContentYMiddle()-4, RGBAColors.WHITE);
+			graphics.text(client.font, this.name, this.getContentX()-40, this.getContentYMiddle()-4, RGBAColors.WHITE);
 			if (!this.children.isEmpty()) {
-				this.children.getFirst().setX(this.getContentRight() - 100);
+				this.children.getFirst().setX(this.getContentRight() - 130);
 				this.children.getFirst().setY(this.getContentY() + 4);
 				this.children.getFirst().extractRenderState(graphics, mouseX, mouseY, a);
 			}
-			this.resetButton.setX(this.getContentX() - 92 + itemWidth);
-			this.resetButton.setY(this.getContentY() + 4);
+
+			this.resetButton.active = !this.feature.isDefault();
+			this.resetButton.setPosition(this.getContentRight() - 126 + itemWidth, this.getContentY() + 4);
 			this.resetButton.extractRenderState(graphics, mouseX, mouseY, a);
 		}
 
@@ -97,6 +107,7 @@ public class FeaturesList extends ContainerObjectSelectionList<FeaturesList.Entr
 			checkbox = CycleButton.onOffBuilder(feature.getValue()).displayOnlyValue().create(10,5,itemWidth,itemHeight-8,feature.getName(),
 				(_, value) -> feature.setValue(value));
 			this.children.add(checkbox);
+			this.finalInitize();
 		}
 
 		@Override
@@ -111,7 +122,6 @@ public class FeaturesList extends ContainerObjectSelectionList<FeaturesList.Entr
 		public NumberEntry(NumberFeature<?> feature) {
 			super(feature);
 			this.input = new EditBox(client.font,itemWidth,itemHeight-8,feature.getName());
-			this.input.setValue(feature.getValue().toString());
 			this.input.setResponder(value -> {
 				if (feature.isValid(value)) {
 					this.input.setTextColor(-2039584);
@@ -127,6 +137,7 @@ public class FeaturesList extends ContainerObjectSelectionList<FeaturesList.Entr
 				}
 			});
 			this.children.add(input);
+			this.finalInitize();
 		}
 
 		@Override
@@ -142,9 +153,9 @@ public class FeaturesList extends ContainerObjectSelectionList<FeaturesList.Entr
 		public StringEntry(StringFeature feature) {
 			super(feature);
 			this.input = new EditBox(client.font,itemWidth,itemHeight-8,feature.getName());
-			this.input.setValue(feature.getValue());
 			this.input.setResponder(feature::setValue);
 			this.children.add(input);
+			this.finalInitize();
 		}
 
 		@Override
@@ -161,8 +172,8 @@ public class FeaturesList extends ContainerObjectSelectionList<FeaturesList.Entr
 			CycleButton.Builder<String> builder = CycleButton.builder(feature::getTranslatableValue,feature.getDefaultValue()).displayOnlyValue();
 			builder.withValues(feature.getEnumValues(),feature.getEnumValues());
 			this.checkbox = builder.create(0,4,itemWidth,itemHeight-8,feature.getName(),(_,value) -> feature.setValue(value));
-			this.checkbox.setValue(feature.getValue());
 			this.children.add(checkbox);
+			this.finalInitize();
 		}
 
 		@Override

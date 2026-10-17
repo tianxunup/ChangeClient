@@ -25,7 +25,7 @@ public class ChangeGui extends Screen {
 		super.init();
 		this.layout.addTitleHeader(this.title,this.font);
 		this.layout.addToContents(new FeaturesList(Minecraft.getInstance(),this));
-		this.layout.addToFooter(Button.builder(Component.translatable("gui.changeclient.close"), button -> {
+		this.layout.addToFooter(Button.builder(Component.translatable("gui.changeclient.close"), _ -> {
 			Minecraft.getInstance().gui.setScreen(null);
 		}).bounds(0,0,160,20).build());
 		this.layout.visitWidgets(this::addRenderableWidget);
@@ -45,5 +45,9 @@ public class ChangeGui extends Screen {
 		} catch (IOException e) {
 			ChangeClient.LOGGER.error("Couldn't save config file!",e);
 		}
+	}
+	@Override
+	public boolean isPauseScreen() {
+		return false;
 	}
 }

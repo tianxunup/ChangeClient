@@ -10,7 +10,7 @@ public abstract class Feature<T> {
 	protected T value;
 	private final T defaultValue;
 
-	public Feature(String id, T defaultValue) {
+	protected Feature(String id, T defaultValue) {
 		this.id = id;
 		this.value = this.defaultValue = defaultValue;
 	}
@@ -19,6 +19,9 @@ public abstract class Feature<T> {
 	}
 	public Component getName() {
 		return Component.translatable("changeclient.feature." + id);
+	}
+	public Component getDescription() {
+		return Component.translatableWithFallback("changeclient.feature.%s.description".formatted(id),"");
 	}
 	public T getValue() {
 		return value;
