@@ -17,7 +17,6 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
-import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,9 +36,9 @@ public class ChangeClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		changeGuiKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.change.gui",
-			InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_BACKSPACE, KEY_CATEGORY));
+			InputConstants.KEY_BACKSPACE, KEY_CATEGORY));
 		boatFlyDeclineKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.change.boat_fly_decline",
-			InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_DOWN, KEY_CATEGORY));
+			InputConstants.KEY_DOWN, KEY_CATEGORY));
 		ClientTickEvents.END_CLIENT_TICK.register(this::tick);
 		ClientLifecycleEvents.CLIENT_STOPPING.register(_ -> {
 			try {
@@ -85,7 +84,7 @@ public class ChangeClient implements ClientModInitializer {
 		if (ChangeFeaturesConfig.AIR_FLY.getValue()) {
 			client.player.getAbilities().mayfly = true;
 		}
-		else if (client.player.gameMode().isSurvival()) {
+		else if (client.player.gameMode() == null || client.player.gameMode().isSurvival()) {
 			client.player.getAbilities().mayfly = false;
 		}
 	}
